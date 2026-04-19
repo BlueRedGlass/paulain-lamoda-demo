@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paulain × Lamoda — Операционный центр</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f5f4f1;--card:#fff;--border:#e5e4e0;--text:#1a1a1a;--muted:#8a8a8a;--subtle:#b5b5b5;
+--green:#16a34a;--gbg:#dcfce7;--gt:#166534;
+--ybg:#fef9c3;--yt:#854d0e;
+--obg:#fed7aa;--ot:#9a3412;
+--red:#dc2626;--rbg:#fecaca;--rt:#991b1b;
+--blue:#2563eb;--bbg:#dbeafe;--bt:#1e40af;
+--pbg:#f3e8ff;--pt:#7c3aed;
+--r:10px;
+}
+body{font-family:'Onest',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.hdr{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:16px 20px 0}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.brand{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:.35;margin-bottom:2px}
+.title{font-size:18px;font-weight:700}
+.upd{font-size:10px;opacity:.45;text-align:right}
+.nav{display:flex;gap:2px;overflow-x:auto;padding-bottom:0}
+.nav button{padding:8px 16px;border:none;border-radius:7px 7px 0 0;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:.2s;white-space:nowrap}
+.nav .on{background:var(--bg);color:var(--text);font-weight:600}
+.nav button:not(.on){background:rgba(255,255,255,.06);color:rgba(255,255,255,.4)}
+.nav button:not(.on):hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+/* Tariff bar */
+.tariff-bar{background:#fafaf8;border-bottom:1px solid var(--border);padding:6px 20px;font-size:10px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.tariff-bar b{color:var(--text);font-weight:600}
+.tariff-bar .edit-btn{background:none;border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:9px;cursor:pointer;font-family:inherit;color:var(--blue);margin-left:4px}
+/* Filters bar */
+.fbar{padding:10px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);background:#fefefe}
+.fbar select,.fbar input{padding:5px 10px;border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:inherit;background:#fff}
+.fbar input[type=text]{width:160px}
+.fbar .per-btn{padding:4px 10px;border:1px solid var(--border);border-radius:5px;font-size:10px;cursor:pointer;font-family:inherit;background:#fff;transition:.15s}
+.fbar .per-btn.on{background:var(--bbg);border-color:var(--blue);color:var(--bt);font-weight:600}
+.fbar .export-btn{margin-left:auto;padding:5px 12px;border:1px solid var(--gt);border-radius:6px;font-size:10px;cursor:pointer;font-family:inherit;background:var(--gbg);color:var(--gt);font-weight:600}
+.fbar label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+/* Pages */
+.page{padding:16px 20px 40px;display:none}
+.page.show{display:block}
+/* KPI */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:8px;margin-bottom:14px}
+.kpi{background:var(--card);border-radius:var(--r);padding:12px;border:1px solid var(--border);position:relative}
+.kpi-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.kpi-v{font-size:18px;font-weight:700}
+.kpi-s{font-size:10px;color:var(--muted);margin-top:1px}
+.tip{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#f1f5f9;color:var(--muted);font-size:8px;font-weight:700;cursor:help;position:relative;flex-shrink:0}
+.tip:hover::after{content:attr(data-t);position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:400;white-space:nowrap;z-index:99;max-width:260px;white-space:normal;line-height:1.4;text-transform:none;letter-spacing:0}
+/* Cards */
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:14px;margin-bottom:12px}
+.card-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:900px){.three{grid-template-columns:1fr}}
+/* Alerts */
+.alrt{padding:7px 10px;border-radius:7px;font-size:11px;display:flex;align-items:flex-start;gap:6px;margin-bottom:5px}
+.alrt-r{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.alrt-y{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);background:#fafaf8;position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap;border-bottom:2px solid var(--border)}
+td{padding:7px 8px;border-bottom:1px solid var(--border)}
+tbody tr{transition:.12s}
+tbody tr:hover{background:#f9f9f6}
+tbody tr.sel{background:#fffbeb}
+.tbl-w{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);background:var(--card)}
+.pill{display:inline-block;padding:2px 8px;border-radius:16px;font-size:9px;font-weight:600;white-space:nowrap}
+.todo{padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;display:flex;gap:6px;align-items:flex-start}
+.todo:last-child{border:none}
+.todo-n{background:#f1f5f9;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);flex-shrink:0}
+.lr{display:flex;justify-content:space-between;padding:4px 0;font-size:11px}
+.lr:not(:last-child){border-bottom:1px solid var(--border)}
+.mc{width:38px;height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border-radius:4px;margin:1px}
+/* SKU card */
+.skc{margin-top:12px;border:1px solid var(--border);border-radius:var(--r);background:var(--card);overflow:hidden}
+.skc-h{padding:14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.skc-secs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.skc-sec{padding:14px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.skc-sec:last-child{border-right:none}
+.skc-st{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:8px}
+.skr{display:flex;justify-content:space-between;padding:2px 0;font-size:11px}
+.skr .lb{color:var(--muted)}
+.skr .vl{font-weight:600}
+/* Override */
+.ov{padding:14px;background:#fafaf8;border-top:1px solid var(--border)}
+.ov textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:7px;font-size:11px;font-family:inherit;resize:vertical;min-height:36px;margin-top:5px}
+.ov-btns{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.ov-btns button{padding:4px 10px;border:1px solid var(--border);border-radius:5px;font-size:10px;font-family:inherit;cursor:pointer;background:#fff;transition:.12s}
+.ov-btns button:hover{background:#f1f5f9}
+.ov-btns .act{background:var(--bbg);border-color:var(--blue);color:var(--bt)}
+/* Timeline */
+.tl-i{padding:5px 0 5px 14px;border-left:2px solid var(--border);font-size:10px;color:var(--muted);position:relative}
+.tl-i::before{content:'';position:absolute;left:-3.5px;top:9px;width:5px;height:5px;border-radius:50%;background:var(--border)}
+.tl-d{font-weight:600;color:var(--text)}
+/* Scenario */
+.scn{margin-top:12px;background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fed7aa;border-radius:var(--r);padding:14px}
+.scn-t{font-size:12px;font-weight:600;color:#92400e;margin-bottom:5px}
+.scn-x{font-size:11px;color:#78350f;line-height:1.6}
+/* AI */
+.ai{margin-top:12px;background:linear-gradient(135deg,#eff6ff,#f5f3ff);border-radius:var(--r);padding:14px;border:1px solid #c7d2fe}
+.ai-t{font-size:11px;font-weight:700;color:var(--pt);margin-bottom:6px}
+.ai-x{font-size:11px;line-height:1.7;color:#374151}
+.ai-x p{margin-bottom:5px}
+.ai-x p:last-child{margin:0}
+/* Funnel */
+.funnel{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:8px 0}
+.fn-step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;text-align:center;min-width:70px}
+.fn-step .fn-v{font-size:16px;font-weight:700}
+.fn-step .fn-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.fn-arr{color:var(--subtle);font-size:16px}
+.fn-pct{font-size:10px;font-weight:600;color:var(--bt);background:var(--bbg);padding:2px 6px;border-radius:10px}
+/* Footer */
+.ftr{padding:14px;text-align:center;font-size:9px;color:var(--muted);border-top:1px solid var(--border)}
+.green{color:var(--gt)}.red{color:var(--red)}.amber{color:#d97706}.blue{color:var(--blue)}.purple{color:var(--pt)}
+.bold{font-weight:700}.w6{font-weight:600}.w5{font-weight:500}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="hdr">
+<div class="hdr-top">
+<div><div class="brand">Paulain × Lamoda</div><div class="title">Операционный центр</div></div>
+<div class="upd">Обновлено<br><b style="opacity:.8">19.04.2026 09:00 ХБР</b></div>
+</div>
+<div class="nav" id="nav"></div>
+</div>
+<div class="tariff-bar" id="tariff-bar"></div>
+<div class="fbar" id="fbar"></div>
+<div class="page" id="p0"></div>
+<div class="page" id="p1"></div>
+<div class="page" id="p2"></div>
+<div class="page" id="p3"></div>
+<div class="ftr">Paulain × Lamoda — Операционный центр · Демо v4</div>
+
+<script>
+// ===== DATA =====
+const SKU=[
+{id:1,model:"Альба",color:"беж",cat:"Платье",sizes:{42:3,44:1,46:4,48:1,50:0,52:0,54:2,56:1,58:0},ordered:28,bought:22,ret:2,views:1840,cart:312,stock:14,transit:4,cost:4400,buyPrice:4752,price:12950,commRate:.5,log:264,pack:134,store:0,turn:"high",dns:2,ship:3,priority:"обычный",comment:"",fabric:"есть",onRes:2,inDel:3,atPVZ:1,inFit:0,stockH:[0,18,22,20,14],salesH:[0,3,8,7,6]},
+{id:2,model:"Джипси",color:"красный",cat:"Платье",sizes:{42:2,44:3,46:2,48:1,50:2,52:1,54:0,56:0,58:0},ordered:35,bought:29,ret:4,views:2450,cart:480,stock:8,transit:6,cost:5200,buyPrice:5616,price:15950,commRate:.5,log:264,pack:134,store:0,turn:"high",dns:1,ship:4,priority:"высокий",comment:"Бестселлер",fabric:"есть",onRes:1,inDel:4,atPVZ:2,inFit:1,stockH:[0,15,20,14,8],salesH:[0,4,10,9,8]},
+{id:3,model:"Стоун",color:"чёрный",cat:"Платье",sizes:{46:2,48:3,50:4,52:3,54:2,56:1,58:0},ordered:19,bought:15,ret:1,views:980,cart:145,stock:22,transit:0,cost:3900,buyPrice:4212,price:11950,commRate:.5,log:264,pack:134,store:120,turn:"medium",dns:8,ship:2,priority:"обычный",comment:"",fabric:"есть",onRes:0,inDel:1,atPVZ:0,inFit:0,stockH:[0,25,24,23,22],salesH:[0,2,5,4,4]},
+{id:4,model:"Пилар",color:"шоколад",cat:"Юбка",sizes:{44:2,46:3,48:4,50:3,52:2,54:2,56:1,58:1},ordered:12,bought:8,ret:3,views:620,cart:78,stock:18,transit:0,cost:2800,buyPrice:3024,price:8950,commRate:.5,log:264,pack:134,store:480,turn:"low",dns:19,ship:1,priority:"обычный",comment:"В комплекте с блузами",fabric:"есть",onRes:0,inDel:0,atPVZ:1,inFit:0,stockH:[0,20,20,19,18],salesH:[0,1,3,2,2]},
+{id:5,model:"Белла Бьянка",color:"красный",cat:"Платье",sizes:{44:1,46:0,48:1,50:1,52:1,54:1,56:0,58:0},ordered:42,bought:36,ret:3,views:3100,cart:620,stock:5,transit:8,cost:5100,buyPrice:5508,price:14950,commRate:.5,log:264,pack:134,store:0,turn:"high",dns:0,ship:5,priority:"высокий",comment:"ДЕФИЦИТ",fabric:"есть",onRes:3,inDel:5,atPVZ:3,inFit:2,stockH:[0,20,18,12,5],salesH:[0,5,12,10,9]},
+{id:6,model:"Илайн бейс",color:"шоколад",cat:"Блуза",sizes:{46:2,48:2,50:2,52:2,54:3},ordered:3,bought:1,ret:1,views:180,cart:12,stock:11,transit:0,cost:3219,buyPrice:3476,price:10950,commRate:.5,log:264,pack:134,store:1320,turn:"zero",dns:34,ship:1,priority:"не трогать",comment:"Вывоз + пересъёмка",fabric:"есть",onRes:0,inDel:0,atPVZ:0,inFit:0,stockH:[0,11,11,11,11],salesH:[0,0,1,0,0]},
+{id:7,model:"Леони",color:"розовый кварц",cat:"Блуза",sizes:{44:1,46:2,48:2,50:2,52:2},ordered:5,bought:3,ret:1,views:290,cart:28,stock:9,transit:0,cost:4170,buyPrice:4504,price:13950,commRate:.5,log:264,pack:134,store:720,turn:"zero",dns:31,ship:1,priority:"обычный",comment:"Снизить цену",fabric:"есть",onRes:0,inDel:0,atPVZ:0,inFit:0,stockH:[0,11,10,10,9],salesH:[0,0,2,1,0]},
+{id:8,model:"Альба",color:"чёрный",cat:"Платье",sizes:{42:1,44:2,46:3,48:0,50:0,52:1,54:0,56:0,58:0},ordered:16,bought:12,ret:2,views:1120,cart:189,stock:15,transit:3,cost:4400,buyPrice:4752,price:12950,commRate:.5,log:264,pack:134,store:0,turn:"medium",dns:6,ship:3,priority:"обычный",comment:"",fabric:"есть",onRes:1,inDel:2,atPVZ:0,inFit:1,stockH:[0,18,17,16,15],salesH:[0,2,4,3,3]},
+{id:9,model:"Остин/Фейт",color:"фуксия",cat:"Комплект",sizes:{42:1,44:2,46:2,48:2},ordered:2,bought:1,ret:0,views:95,cart:8,stock:7,transit:0,cost:6800,buyPrice:7344,price:19950,commRate:.5,log:264,pack:134,store:840,turn:"zero",dns:42,ship:1,priority:"не трогать",comment:"Вывоз → раздельные артикулы",fabric:"дефицит",onRes:0,inDel:0,atPVZ:0,inFit:0,stockH:[0,8,8,7,7],salesH:[0,0,1,0,0]},
+{id:10,model:"Микаэль",color:"лаванда",cat:"Блуза",sizes:{44:2,46:3,48:3,50:2,52:2},ordered:8,bought:6,ret:0,views:410,cart:52,stock:12,transit:0,cost:3600,buyPrice:3888,price:10950,commRate:.5,log:264,pack:134,store:240,turn:"low",dns:15,ship:2,priority:"обычный",comment:"",fabric:"в пути",onRes:0,inDel:1,atPVZ:0,inFit:0,stockH:[0,14,14,13,12],salesH:[0,1,2,2,1]},
+{id:11,model:"Кассандра",color:"изумруд",cat:"Платье",sizes:{44:1,46:2,48:2,50:1,52:1,54:1,56:1},ordered:31,bought:26,ret:2,views:2200,cart:410,stock:9,transit:5,cost:5500,buyPrice:5940,price:16950,commRate:.5,log:264,pack:134,store:0,turn:"high",dns:1,ship:4,priority:"высокий",comment:"Полный ряд",fabric:"есть",onRes:2,inDel:3,atPVZ:1,inFit:1,stockH:[0,16,14,11,9],salesH:[0,4,9,7,6]},
+{id:12,model:"Виола",color:"пудра",cat:"Платье",sizes:{42:3,44:3,46:3,48:3,50:3,52:2,54:2},ordered:11,bought:7,ret:2,views:540,cart:68,stock:19,transit:0,cost:4100,buyPrice:4428,price:12450,commRate:.5,log:264,pack:134,store:360,turn:"low",dns:22,ship:2,priority:"обычный",comment:"",fabric:"есть",onRes:0,inDel:0,atPVZ:1,inFit:0,stockH:[0,20,20,20,19],salesH:[0,1,3,2,1]},
+];
+
+// Tariffs
+const TAR={comm:50,storeFree:28,storeDay:4,delivery:264,returnCost:42,packCost:134,nds:5};
+
+function ec(s){
+const comm=s.price*s.commRate;const nds=s.cost*TAR.nds/100;
+const net=s.price-comm-s.log-(s.store||0);const profit=net-s.cost-s.pack-nds;
+const margin=s.price>0?(profit/s.price)*100:0;const roi=s.cost>0?(profit/s.cost)*100:0;
+const reject=s.ordered-s.bought-s.ret;const pokatushki=(reject+s.ret)*(s.log);
+const turnLM=s.stock>0?s.bought/s.stock:0;const turnOwn=s.stock>0?(s.bought*s.price)/(s.stock*s.cost):0;
+return{comm,nds,net,profit,margin,roi,reject,pokatushki,turnLM,turnOwn};
+}
+const TC={high:{bg:"var(--gbg)",t:"var(--gt)",l:"Высокая"},medium:{bg:"var(--ybg)",t:"var(--yt)",l:"Нормальная"},low:{bg:"var(--obg)",t:"var(--ot)",l:"Слабая"},zero:{bg:"var(--rbg)",t:"var(--rt)",l:"Нулевая"}};
+const fmt=n=>Math.round(n).toLocaleString("ru-RU");
+const fR=n=>fmt(n)+" ₽";
+const T=(label,tip)=>`${label} <span class="tip" data-t="${tip}">?</span>`;
+
+// Globals
+let period="30",catF="all",colorF="all",searchF="",priceMode="lm";
+const cats=[...new Set(SKU.map(s=>s.cat))];
+const colors=[...new Set(SKU.map(s=>s.color))];
+const filtered=()=>SKU.filter(s=>(catF==="all"||s.cat===catF)&&(colorF==="all"||s.color===colorF)&&(searchF===""||`${s.model} ${s.color}`.toLowerCase().includes(searchF.toLowerCase())));
+const priceOf=s=>priceMode==="buy"?s.buyPrice:s.price;
+const priceLabel=()=>priceMode==="buy"?"закуп":"Lamoda";
+
+// Aggregates
+const agg=()=>{const f=filtered();return{
+tO:f.reduce((a,s)=>a+s.ordered,0),tB:f.reduce((a,s)=>a+s.bought,0),tR:f.reduce((a,s)=>a+s.ret,0),
+tStock:f.reduce((a,s)=>a+s.stock,0),tTransit:f.reduce((a,s)=>a+s.transit,0),
+tViews:f.reduce((a,s)=>a+s.views,0),tCart:f.reduce((a,s)=>a+s.cart,0),
+tRevG:f.reduce((a,s)=>a+s.price*s.bought,0),tProfit:f.reduce((a,s)=>a+ec(s).profit*s.bought,0),
+tStore:f.reduce((a,s)=>a+(s.store||0),0),tPokat:f.reduce((a,s)=>a+ec(s).pokatushki,0),
+deficit:f.filter(s=>s.stock<3).length,
+tInProc:f.reduce((a,s)=>a+s.onRes+s.inDel+s.atPVZ+s.inFit,0),
+};};
+
+// ===== NAV =====
+const pages=["Главный экран","Запасы и движение","Экономика SKU","Карточка SKU"];
+let cur=0;
+function renderNav(){
+const n=document.getElementById("nav");n.innerHTML="";
+pages.forEach((p,i)=>{const b=document.createElement("button");b.textContent=p;b.className=i===cur?"on":"";b.onclick=()=>{cur=i;renderNav();showPage();renderAll()};n.appendChild(b)});
+}
+function showPage(){[0,1,2,3].forEach(i=>{document.getElementById("p"+i).className="page"+(i===cur?" show":"")});}
+
+// ===== TARIFF BAR =====
+function renderTariff(){
+document.getElementById("tariff-bar").innerHTML=`
+<b>Тарифы ЛМ на дату отчёта:</b>
+Комиссия: <b>${TAR.comm}%</b> · Хранение: <b>${TAR.storeDay}₽/ед/день</b> (бесплатно ${TAR.storeFree} дн.) ·
+Возврат: <b>${TAR.returnCost}₽</b> · Доставка: <b>${TAR.delivery}₽</b> · Упаковка: <b>${TAR.packCost}₽</b> · НДС: <b>${TAR.nds}%</b>
+<button class="edit-btn" onclick="alert('В рабочей версии: редактирование тарифов с сохранением в базу')">✏️ Изменить</button>`;
+}
+
+// ===== FILTER BAR =====
+function renderFbar(){
+document.getElementById("fbar").innerHTML=`
+<label>Период:</label>
+${["30","90","180","all"].map(p=>`<button class="per-btn ${period===p?'on':''}" onclick="period='${p}';renderAll()">${p==="all"?"Всё время":p+"д"}</button>`).join("")}
+<label style="margin-left:8px">Категория:</label>
+<select onchange="catF=this.value;renderAll()"><option value="all">Все</option>${cats.map(c=>`<option value="${c}" ${catF===c?'selected':''}>${c}</option>`).join("")}</select>
+<label>Цвет:</label>
+<select onchange="colorF=this.value;renderAll()"><option value="all">Все</option>${colors.map(c=>`<option value="${c}" ${colorF===c?'selected':''}>${c}</option>`).join("")}</select>
+<label>Поиск:</label>
+<input type="text" placeholder="Название SKU..." value="${searchF}" oninput="searchF=this.value;renderAll()">
+<label>Цена:</label>
+<select onchange="priceMode=this.value;renderAll()"><option value="lm" ${priceMode==="lm"?'selected':''}>Цена Lamoda</option><option value="buy" ${priceMode==="buy"?'selected':''}>Цена закупа</option></select>
+<button class="export-btn" onclick="alert('В рабочей версии: выгрузка текущей вкладки в Excel (.xlsx)')">📥 Скачать Excel</button>`;
+}
+
+// ===== PAGE 0: MAIN =====
+function renderP0(){
+const a=agg(),f=filtered();
+const sellTh=a.tO>0?((a.tB/a.tO)*100).toFixed(1):"0";
+const avgM=a.tRevG>0?((a.tProfit/a.tRevG)*100).toFixed(1):"0";
+
+// Category breakdown
+const catData={};f.forEach(s=>{if(!catData[s.cat])catData[s.cat]={ord:0,ordR:0,buy:0,buyR:0,onR:0,inD:0,atP:0,inF:0};const c=catData[s.cat];c.ord+=s.ordered;c.ordR+=s.ordered*s.price;c.buy+=s.bought;c.buyR+=s.bought*s.price;c.onR+=s.onRes;c.inD+=s.inDel;c.atP+=s.atPVZ;c.inF+=s.inFit});
+
+const alerts=[];
+f.forEach(s=>{if(s.stock<3)alerts.push({t:"r",msg:`📦 <b>${s.model} ${s.color}</b> — остаток ${s.stock} шт, риск отсутствия`});if(s.dns>=28)alerts.push({t:"y",msg:`⏱ <b>${s.model} ${s.color}</b> — ${s.dns} дн. без продаж → платное хранение ${fR(s.store)}`})});
+
+const top5=[...f].sort((a,b)=>ec(b).profit*b.bought-ec(a).profit*a.bought).slice(0,5);
+
+document.getElementById("p0").innerHTML=`
+<div class="kgrid">
+${[{l:T("Выручка (нетто)","Цена продажи − комиссия Lamoda"),v:fR(a.tRevG-a.tRevG*TAR.comm/100),s:"после комиссии ${TAR.comm}%"},
+{l:T("Валовая прибыль","Выручка нетто − себестоимость − логистика − хранение − упаковка − НДС"),v:fR(a.tProfit),s:"маржа "+avgM+"%",c:"green"},
+{l:T("Выкуп","Выкупленные / Заказанные × 100%"),v:sellTh+"%",s:a.tB+" из "+a.tO+" шт"},
+{l:T("Покатушки","Стоимость логистики по отказам и возвратам"),v:fR(a.tPokat),s:(a.tO-a.tB)+" отказов + "+a.tR+" возвр.",c:"red"},
+{l:T("Риск хранения","Суммарная стоимость платного хранения по SKU с 0 продаж > ${TAR.storeFree} дней"),v:fR(a.tStore),s:f.filter(s=>s.store>0).length+" SKU",c:a.tStore>0?"red":""},
+{l:T("Дефицит","SKU с остатком менее 3 шт на складе Lamoda"),v:a.deficit+" SKU",s:"остаток < 3 шт",c:a.deficit>0?"red":""},
+].map(k=>`<div class="kpi"><div class="kpi-l">${k.l}</div><div class="kpi-v ${k.c||''}">${k.v}</div><div class="kpi-s">${k.s}</div></div>`).join("")}
+</div>
+
+<!-- FUNNEL -->
+<div class="card">
+<div class="card-t">📊 ${T("Воронка продаж","Полный путь товара: просмотры → корзина → заказы → выкупы → отказы → возвраты")}</div>
+<div class="funnel">
+${[{l:"Просмотры",v:a.tViews},{l:"Корзина",v:a.tCart},{l:"Заказы",v:a.tO},{l:"Выкупы",v:a.tB},{l:"Отказы",v:a.tO-a.tB-a.tR},{l:"Возвраты",v:a.tR}].map((s,i,arr)=>{
+const pct=i>0&&arr[i-1].v>0?((s.v/arr[i-1].v)*100).toFixed(0)+"%":"";
+return(i>0?`<span class="fn-pct">${pct}</span><span class="fn-arr">→</span>`:"")+`<div class="fn-step"><div class="fn-v">${fmt(s.v)}</div><div class="fn-l">${s.l}</div></div>`;
+}).join("")}
+</div></div>
+
+<!-- CATEGORIES -->
+<div class="two" style="margin-bottom:12px">
+<div class="card">
+<div class="card-t">📋 ${T("Заказы и выкупы по категориям","Разбивка заказов и выкупов по типам товаров в штуках и рублях")}</div>
+<div class="tbl-w" style="border:none"><table>
+<thead><tr><th style="text-align:left">Категория</th><th style="text-align:right">Заказано, шт</th><th style="text-align:right">Заказано, ₽</th><th style="text-align:right">Выкуплено, шт</th><th style="text-align:right">Выкуплено, ₽</th><th style="text-align:right">Выкуп %</th></tr></thead>
+<tfoot><tr class="bold" style="cursor:default;background:#fafaf8"><td>ИТОГО</td><td style="text-align:right">${a.tO}</td><td style="text-align:right">${fR(a.tRevG)}</td><td style="text-align:right">${a.tB}</td><td style="text-align:right" class="green">${fR(f.reduce((a,s)=>a+s.bought*s.price,0))}</td><td style="text-align:right">${sellTh}%</td></tr></tfoot>
+<tbody>${Object.keys(catData).map(k=>{const c=catData[k];const p=c.ord>0?((c.buy/c.ord)*100).toFixed(0):"—";return`<tr style="cursor:default"><td class="w5">${k}</td><td style="text-align:right">${c.ord}</td><td style="text-align:right">${fR(c.ordR)}</td><td style="text-align:right" class="w6">${c.buy}</td><td style="text-align:right" class="w6 green">${fR(c.buyR)}</td><td style="text-align:right" class="w6 ${p>=70?'green':p>=50?'amber':'red'}">${p}%</td></tr>`}).join("")}</tbody>
+</table></div></div>
+<div class="card">
+<div class="card-t">🚚 ${T("В процессе","Единицы товара в статусах: на резерве, в доставке, на ПВЗ, на примерке")}</div>
+${(()=>{const ts={onR:0,inD:0,atP:0,inF:0};f.forEach(s=>{ts.onR+=s.onRes;ts.inD+=s.inDel;ts.atP+=s.atPVZ;ts.inF+=s.inFit});const tot=ts.onR+ts.inD+ts.atP+ts.inF;
+return`<div class="kgrid" style="grid-template-columns:1fr 1fr;margin-bottom:8px"><div class="kpi" style="padding:8px"><div class="kpi-l">Всего</div><div class="kpi-v blue">${tot} шт</div><div class="kpi-s">${fR(tot*12950)}</div></div><div class="kpi" style="padding:8px"><div class="kpi-l">На ПВЗ + примерка</div><div class="kpi-v amber">${ts.atP+ts.inF} шт</div></div></div>
+<div class="tbl-w" style="border:none"><table><thead><tr><th style="text-align:left">Статус</th><th style="text-align:right">Шт</th></tr></thead><tbody>
+${[{l:"🔒 На резерве",v:ts.onR},{l:"🚛 В доставке",v:ts.inD},{l:"📍 На ПВЗ",v:ts.atP},{l:"👗 На примерке",v:ts.inF}].map(x=>`<tr style="cursor:default"><td class="w5">${x.l}</td><td style="text-align:right" class="w6">${x.v}</td></tr>`).join("")}
+</tbody></table></div>`})()}
+</div></div>
+
+<!-- ACTIONS + ALERTS + TOP -->
+<div class="three">
+<div class="card">
+<div class="card-t">📋 Действия на сегодня</div>
+${["Догрузить <b>Белла Бьянка</b> 44/46 — дефицит","Проверить возвраты <b>Джипси</b>","Вывоз <b>Остин/Фейт</b> → пересъёмка","Скидка <b>Пилар</b> — хранение дорожает","Резервы на среду"].map((t,i)=>`<div class="todo"><div class="todo-n">${i+1}</div><div>${t}</div></div>`).join("")}
+</div>
+<div class="card">
+<div class="card-t">🚨 Алерты</div>
+${alerts.slice(0,5).map(a=>`<div class="alrt alrt-${a.t}">${a.msg}</div>`).join("")}
+</div>
+<div class="card">
+<div class="card-t" style="color:var(--gt)">🔥 Топ-5 по прибыли</div>
+${top5.map(s=>`<div class="lr"><span class="w5">${s.model} ${s.color}</span><span class="w6 green">${fR(ec(s).profit*s.bought)}</span></div>`).join("")}
+</div>
+</div>
+
+<div class="ai">
+<div class="ai-t">🤖 AI-рекомендации</div>
+<div class="ai-x">
+<p><b>Догрузка:</b> Белла Бьянка, Джипси, Кассандра — 72% прибыли. Белла Бьянка в дефиците, потеря ~85 000₽/нед.</p>
+<p><b>Скидка vs хранение:</b> Остин/Фейт — 42 дня ∅, хранение 840₽. Рекомендация: вывоз + раздельные артикулы.</p>
+<p><b>Возможность:</b> Снижение цены 15% на 4 SKU с нулевой оборачиваемостью → +12-18 продаж/мес, экономия 3 360₽/мес на хранении.</p>
+</div></div>`;
+}
+
+// ===== PAGE 1: INVENTORY =====
+let mMode="stock",selM=null;
+function renderP1(){
+const f=filtered();const allSz=[42,44,46,48,50,52,54,56,58,60,62,64];
+const modes=[{k:"stock",l:"Остаток для продажи"},{k:"toCust",l:"К покупателю"},{k:"fromCust",l:"От покупателя"},{k:"sales",l:"Продажи"},{k:"transit",l:"В пути"},{k:"storeRisk",l:"Риск хранения"},{k:"total",l:"ИТОГО СВОДНО"}];
+// Totals
+const totRow={};allSz.forEach(sz=>{totRow[sz]=f.reduce((a,s)=>(s.sizes[sz]!==undefined?a+cellVal(s,sz):a),0)});
+const grandTot=f.reduce((a,s)=>a+Object.values(s.sizes).reduce((b,v)=>b+v,0),0);
+const grandR=f.reduce((a,s)=>a+Object.values(s.sizes).reduce((b,v)=>b+v,0)*priceOf(s),0);
+
+let html=`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">
+<span style="font-size:10px;color:var(--muted);padding:5px 0;font-weight:600">РЕЖИМ:</span>
+${modes.map(m=>`<button onclick="mMode='${m.k}';renderP1()" style="padding:4px 10px;border:1px solid ${mMode===m.k?'var(--blue)':'var(--border)'};border-radius:5px;font-size:10px;font-family:inherit;cursor:pointer;background:${mMode===m.k?'var(--bbg)':'#fff'};color:${mMode===m.k?'var(--bt)':'var(--text)'}">${m.l}</button>`).join("")}
+</div>
+<div class="tbl-w"><table>
+<thead><tr><th style="text-align:left">${T("Модель / цвет","Наименование товара из карточки Lamoda")}</th>${allSz.map(s=>`<th style="text-align:center;min-width:38px">${s}</th>`).join("")}<th style="text-align:right">${T("Итого, шт","Сумма по всем размерам")}</th><th style="text-align:right">${T("Итого, ₽","Сумма в ценах "+priceLabel())}</th><th style="text-align:center">${T("Оборач.","Коэффициент оборачиваемости по данным Lamoda за последние 28 дней")}</th></tr></thead>
+<tfoot><tr class="bold" style="background:#fafaf8"><td>ИТОГО</td>${allSz.map(sz=>`<td style="text-align:center">${totRow[sz]||""}</td>`).join("")}<td style="text-align:right">${grandTot}</td><td style="text-align:right">${fR(grandR)}</td><td></td></tr></tfoot>
+<tbody>`;
+f.forEach(s=>{
+const tc=TC[s.turn];let rowTot=0;
+const cells=allSz.map(sz=>{const raw=s.sizes[sz];if(raw===undefined)return`<td style="text-align:center"><div class="mc" style="background:#f9fafb;color:#ddd;margin:auto">—</div></td>`;
+const val=cellVal(s,sz);rowTot+=raw;const c=cellColor(val);
+return`<td style="text-align:center"><div class="mc" style="background:${c.bg};color:${c.t};margin:auto">${val}</div></td>`});
+const rowR=rowTot*priceOf(s);
+html+=`<tr class="${selM===s.id?'sel':''}" onclick="selM=${selM===s.id?'null':s.id};renderP1()" style="cursor:pointer">
+<td class="w5"><div>${s.model}</div><div style="font-size:9px;color:var(--muted)">${s.color} · ${s.cat}</div></td>
+${cells.join("")}
+<td style="text-align:right" class="w6">${rowTot}</td>
+<td style="text-align:right">${fR(rowR)}</td>
+<td style="text-align:center"><span class="pill" style="background:${tc.bg};color:${tc.t}">${tc.l}</span></td></tr>`});
+html+=`</tbody></table></div>`;
+
+if(selM){const s=f.find(x=>x.id===selM);if(s){const p=ec(s);
+html+=`<div class="skc" style="margin-top:10px"><div style="padding:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px">
+${[{l:"Посл. продажа",v:s.dns===0?"Сегодня":s.dns+" дн. назад"},{l:"До платного хранения",v:Math.max(TAR.storeFree-s.dns,0)+" дн.",c:s.dns>=28?"red":s.dns>=20?"amber":"green"},{l:"Прибыль/шт",v:fR(p.profit),c:p.profit>0?"green":"red"},{l:"ROI",v:p.roi.toFixed(0)+"%",c:p.roi>30?"green":p.roi>0?"amber":"red"},{l:"Догрузить?",v:s.stock<3?"❗ СРОЧНО":s.stock<6?"Да":"Нет",c:s.stock<6?"red":""}].map(x=>`<div><div class="kpi-l">${x.l}</div><div class="w6 ${x.c||''}">${x.v}</div></div>`).join("")}
+</div></div>`}}
+document.getElementById("p1").innerHTML=html;
+}
+
+function cellVal(s,sz){
+const raw=s.sizes[sz]||0;
+if(mMode==="stock")return raw;
+if(mMode==="toCust")return Math.round(raw*.3);
+if(mMode==="fromCust")return Math.round(raw*.05);
+if(mMode==="sales")return Math.round(raw*.7);
+if(mMode==="transit")return s.transit>0?Math.round(raw*.3):0;
+if(mMode==="storeRisk")return raw===0&&s.dns>28?1:0;
+if(mMode==="total")return raw;
+return raw;
+}
+function cellColor(val){
+if(val===0)return{bg:"var(--rbg)",t:"var(--rt)"};
+if(val<=2)return{bg:"var(--obg)",t:"var(--ot)"};
+if(val<=4)return{bg:"var(--ybg)",t:"var(--yt)"};
+return{bg:"var(--gbg)",t:"var(--gt)"};
+}
+
+// ===== PAGE 2: ECONOMICS =====
+let eSort="totalP",eDir=-1;
+function renderP2(){
+const f=filtered();
+const sorted=[...f].sort((a,b)=>{const pa=ec(a),pb=ec(b);
+if(eSort==="totalP")return eDir*(pa.profit*a.bought-pb.profit*b.bought);
+if(eSort==="margin")return eDir*(pa.margin-pb.margin);
+if(eSort==="roi")return eDir*(pa.roi-pb.roi);
+if(eSort==="profit")return eDir*(pa.profit-pb.profit);
+if(eSort==="turnLM")return eDir*(pa.turnLM-pb.turnLM);
+return 0});
+const a=agg();const avgM=a.tRevG>0?(a.tProfit/a.tRevG*100).toFixed(1):"0";
+
+const cols=[{k:"name",l:T("SKU","Наименование товара"),a:"left"},{k:"buyPrice",l:T("Закуп","Цена закупки у производителя")},{k:"price",l:T("Цена ЛМ","Розничная цена на Lamoda")},{k:"cost",l:T("Себес произв.","Производственная себестоимость единицы")},{k:"comm",l:T("Комиссия","Удержание Lamoda "+TAR.comm+"%")},{k:"log",l:T("Логист.","Стоимость доставки до покупателя")},{k:"store",l:T("Хранение","Платное хранение после "+TAR.storeFree+" дней")},{k:"pack",l:T("Упак.","Чехол + пломба + пакет + лента")},{k:"pokatushki",l:T("Покатушки","Логистика отказов + возвратов")},{k:"profit",l:T("Чист. прибыль","Цена − комиссия − логистика − хранение − себестоимость − упаковка − НДС")},{k:"margin",l:T("Маржа","Чистая прибыль / Цена × 100%")},{k:"roi",l:T("ROI","Прибыль / Себестоимость × 100%")},{k:"turnLM",l:T("Оборач. ЛМ","Продажи / Остаток за 28 дней")},{k:"bought",l:"Продано"},{k:"totalP",l:T("Прибыль ∑","Чистая прибыль × Продано")}];
+const arrow=k=>eSort===k?(eDir>0?" ↑":" ↓"):"";
+
+// Totals
+const totBought=f.reduce((a,s)=>a+s.bought,0);const totP=f.reduce((a,s)=>a+ec(s).profit*s.bought,0);const totPokat=f.reduce((a,s)=>a+ec(s).pokatushki,0);
+
+let html=`<div class="kgrid">
+${[{l:T("Выручка (брутто)","Цена продажи × Кол-во выкупленных"),v:fR(a.tRevG)},{l:T("Выручка (нетто)","Брутто − комиссия Lamoda"),v:fR(a.tRevG-a.tRevG*TAR.comm/100)},{l:T("Валовая прибыль","Нетто − полная себестоимость"),v:fR(a.tProfit),c:"green"},{l:T("Потери: хранение","Суммарная стоимость платного хранения"),v:fR(a.tStore),c:a.tStore>0?"red":""},{l:T("Потери: покатушки","Логистика отказов и возвратов"),v:fR(a.tPokat),c:"red"}].map(k=>`<div class="kpi"><div class="kpi-l">${k.l}</div><div class="kpi-v ${k.c||''}">${k.v}</div></div>`).join("")}
+</div>
+<div class="tbl-w"><table>
+<thead><tr>${cols.map(c=>`<th style="text-align:${c.a||'right'}" onclick="eSort='${c.k}';eDir=${eSort===c.k?-eDir:-1};renderP2()">${c.l}${arrow(c.k)}</th>`).join("")}</tr></thead>
+<tfoot><tr class="bold" style="background:#fafaf8"><td>ИТОГО</td><td colspan="7"></td><td style="text-align:right;color:var(--red)">${fR(totPokat)}</td><td colspan="4"></td><td style="text-align:right">${totBought}</td><td style="text-align:right;color:var(--gt)">${fR(totP)}</td></tr></tfoot>
+<tbody>`;
+sorted.forEach(s=>{const p=ec(s);const tp=p.profit*s.bought;
+html+=`<tr><td class="w5"><div>${s.model} ${s.color}</div><div style="font-size:9px;color:var(--muted)">${s.cat}</div></td>
+<td style="text-align:right;color:var(--bt)">${fmt(s.buyPrice)}</td><td style="text-align:right">${fmt(s.price)}</td><td style="text-align:right">${fmt(s.cost)}</td>
+<td style="text-align:right;color:var(--rt)">${fmt(Math.round(p.comm))}</td><td style="text-align:right">${fmt(s.log)}</td>
+<td style="text-align:right;color:${s.store>0?'var(--red)':'#ccc'}">${s.store>0?fmt(s.store):'—'}</td><td style="text-align:right">${fmt(s.pack)}</td>
+<td style="text-align:right;color:var(--rt)">${fmt(Math.round(p.pokatushki))}</td>
+<td style="text-align:right" class="bold ${p.profit>0?'green':'red'}">${fR(p.profit)}</td>
+<td style="text-align:right" class="w6 ${p.margin>20?'green':p.margin>0?'amber':'red'}">${p.margin.toFixed(1)}%</td>
+<td style="text-align:right" class="w6 ${p.roi>30?'green':p.roi>0?'amber':'red'}">${p.roi.toFixed(0)}%</td>
+<td style="text-align:right">${p.turnLM.toFixed(2)}</td>
+<td style="text-align:right">${s.bought}</td>
+<td style="text-align:right" class="bold ${tp>0?'green':'red'}">${fR(tp)}</td></tr>`});
+html+=`</tbody></table></div>`;
+
+html+=`<div class="scn"><div class="scn-t">💡 Скидка vs хранение</div><div class="scn-x">
+<b>Илайн бейс:</b> хранение 1 320₽, ROI отрицательный → вывоз<br>
+<b>Остин/Фейт:</b> 42 дня ∅, хранение 840₽ → вывоз + раздельные артикулы<br>
+<b>Пилар:</b> хранение 480₽, маржа ${ec(SKU[3]).margin.toFixed(0)}% — скидка 10% выгодна</div></div>`;
+document.getElementById("p2").innerHTML=html;
+}
+
+// ===== PAGE 3: SKU CARD =====
+let selC=5;
+function renderP3(){
+const f=filtered();
+const skuList=f.map(s=>`<option value="${s.id}" ${s.id===selC?'selected':''}>${s.model} ${s.color} (${s.cat})</option>`).join("");
+const s=f.find(x=>x.id===selC)||f[0];
+if(!s){document.getElementById("p3").innerHTML=`<div class="card">Нет данных</div>`;return}
+const p=ec(s);const tc=TC[s.turn];
+const months=["Дек","Янв","Фев","Мар","Апр"];
+
+// SVG chart: stock + sales + buyout%
+const mkChart=()=>{
+const h=s.stockH||[0,0,0,0,0];const sl=s.salesH||[0,0,0,0,0];
+const maxV=Math.max(...h,...sl,1);
+const W=480,H=150,pad=36,padB=22;const gW=W-pad*2,gH=H-padB-10;
+const pts=(arr)=>arr.map((v,i)=>({x:pad+i*(gW/(arr.length-1)),y:10+gH-((v/maxV)*gH),v}));
+const line=(pts)=>pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(" ");
+const stockPts=pts(h),salesPts=pts(sl);
+const buyoutPcts=h.map((v,i)=>v>0?Math.round((sl[i]/v)*100):0);
+return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:500px;height:auto;margin-top:6px">
+<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity=".15"/><stop offset="100%" stop-color="#3b82f6" stop-opacity=".02"/></linearGradient></defs>
+${[0,.5,1].map(f=>{const y=10+gH-f*gH;return`<line x1="${pad}" y1="${y}" x2="${W-pad}" y2="${y}" stroke="#f3f4f6" stroke-width="1"/><text x="${pad-5}" y="${y+3}" text-anchor="end" font-size="8" fill="#9ca3af">${Math.round(maxV*f)}</text>`}).join("")}
+<path d="${line(stockPts)} L${stockPts[stockPts.length-1].x},${10+gH} L${stockPts[0].x},${10+gH} Z" fill="url(#sg)"/>
+<path d="${line(stockPts)}" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+<path d="${line(salesPts)}" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-dasharray="4,3"/>
+${stockPts.map((pt,i)=>`<circle cx="${pt.x}" cy="${pt.y}" r="3" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/><text x="${pt.x}" y="${pt.y-8}" text-anchor="middle" font-size="9" font-weight="600" fill="#1e40af">${pt.v}</text>`).join("")}
+${salesPts.map((pt,i)=>`<circle cx="${pt.x}" cy="${pt.y}" r="3" fill="#fff" stroke="#16a34a" stroke-width="1.5"/><text x="${pt.x}" y="${pt.y+14}" text-anchor="middle" font-size="8" fill="#166534">${pt.v}</text>`).join("")}
+${stockPts.map((pt,i)=>`<text x="${pt.x}" y="${10+gH+14}" text-anchor="middle" font-size="8" fill="#9ca3af">${months[i]||''}</text>`).join("")}
+</svg>
+<div style="display:flex;gap:12px;font-size:9px;color:var(--muted);margin-top:4px">
+<span>━ <span style="color:#3b82f6">Остатки</span></span>
+<span style="border-bottom:1px dashed #16a34a">- - <span style="color:#16a34a">Продажи</span></span>
+</div>`;};
+
+document.getElementById("p3").innerHTML=`
+<div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<select onchange="selC=+this.value;renderP3()" style="font-weight:600;min-width:220px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit">${skuList}</select>
+</div>
+<div class="skc">
+<div class="skc-h">
+<div><div style="font-size:16px;font-weight:700">${s.model} ${s.color}</div><div style="font-size:11px;color:var(--muted)">${s.cat} · Размеры ${Object.keys(s.sizes).join(", ")} · Поставка #${s.ship}</div></div>
+<div style="display:flex;gap:5px"><span class="pill" style="background:${tc.bg};color:${tc.t}">Оборачиваемость: ${tc.l}</span></div>
+</div>
+
+<!-- FUNNEL for this SKU -->
+<div style="padding:14px;border-bottom:1px solid var(--border)">
+<div class="skc-st">📊 ${T("Воронка SKU","Путь этого товара от просмотров до выкупа")}</div>
+<div class="funnel">
+${[{l:"Просмотры",v:s.views},{l:"Корзина",v:s.cart},{l:"Заказы",v:s.ordered},{l:"Выкупы",v:s.bought},{l:"Отказы",v:s.ordered-s.bought-s.ret},{l:"Возвраты",v:s.ret}].map((st,i,arr)=>{
+const pct=i>0&&arr[i-1].v>0?((st.v/arr[i-1].v)*100).toFixed(0)+"%":"";
+return(i>0?`<span class="fn-pct">${pct}</span><span class="fn-arr">→</span>`:"")+`<div class="fn-step" style="min-width:60px"><div class="fn-v" style="font-size:14px">${fmt(st.v)}</div><div class="fn-l">${st.l}</div></div>`;}).join("")}
+</div></div>
+
+<div class="skc-secs">
+<div class="skc-sec">
+<div class="skc-st">📦 Остатки и движение</div>
+${[["На складе Lamoda",s.stock+" шт"],["В пути",s.transit>0?s.transit+" шт":"—"],["На резерве",s.onRes+" шт"],["В доставке",s.inDel+" шт"],["На ПВЗ",s.atPVZ+" шт"],["На примерке",s.inFit+" шт"],["Продажи 30 дн.",Math.round(s.bought*.7)+" шт"],["Продажи 90 дн.",s.bought+" шт"],["Продажи 180 дн.",Math.round(s.bought*1.8)+" шт"],["Невыкупы",p.reject+" шт"],["Возвраты",s.ret+" шт"],["Дн. без продаж",s.dns]].map(r=>`<div class="skr"><span class="lb">${r[0]}</span><span class="vl">${r[1]}</span></div>`).join("")}
+</div>
+<div class="skc-sec">
+<div class="skc-st">💰 Экономика</div>
+${[["Цена закупа","<span class='blue'>"+fR(s.buyPrice)+"</span>"],["Цена на Lamoda",fR(s.price)],["Комиссия ("+TAR.comm+"%)",fR(p.comm)],["Логистика",fR(s.log)],["Упаковка",fR(s.pack)],["Хранение",s.store>0?"<span class='red'>"+fR(s.store)+"</span>":"—"],["Себестоимость произв.",fR(s.cost)],["НДС ("+TAR.nds+"%)",fR(p.nds)],["Покатушки","<span class='red'>"+fR(p.pokatushki)+"</span>"],["Чистая выручка",fR(p.net)],["Чистая прибыль/шт","<span class='bold "+(p.profit>0?"green":"red")+"'>"+fR(p.profit)+"</span>"],["Маржа","<span class='w6 "+(p.margin>20?"green":p.margin>0?"amber":"red")+"'>"+p.margin.toFixed(1)+"%</span>"],["ROI","<span class='w6 "+(p.roi>30?"green":p.roi>0?"amber":"red")+"'>"+p.roi.toFixed(0)+"%</span>"],["Оборач. ЛМ",p.turnLM.toFixed(2)]].map(r=>`<div class="skr"><span class="lb">${r[0]}</span><span class="vl">${r[1]}</span></div>`).join("")}
+</div>
+<div class="skc-sec">
+<div class="skc-st">🔄 Пополнение</div>
+${[["Рекомендация",s.stock<3?"Догрузить 8-12 шт ❗":s.stock<8?"Догрузить 4-6 шт":"Не требуется"],["Целевая дата",s.stock<6?"до 30.04":"—"],["Статус заказа",s.transit>0?"В пути ("+s.transit+" шт)":"Не размещён"],["Площадка","Хабаровск"],["Риск отсутствия",s.stock<3?"<span class='red bold'>ВЫСОКИЙ</span>":s.stock<6?"<span class='amber'>Средний</span>":"Низкий"]].map(r=>`<div class="skr"><span class="lb">${r[0]}</span><span class="vl">${r[1]}</span></div>`).join("")}
+</div>
+</div>
+
+<!-- Chart -->
+<div style="padding:14px;border-top:1px solid var(--border)">
+<div class="skc-st">📈 ${T("Остатки и продажи помесячно","Фиксация на 1-е число месяца. Синяя линия — остаток, зелёная пунктирная — продажи")}</div>
+${mkChart()}
+</div>
+
+<!-- Timeline -->
+<div style="padding:14px;border-top:1px solid var(--border)">
+<div class="skc-st">📜 История событий</div>
+<div>${[{d:"15.04",t:"Выкуп — 2 шт"},{d:"12.04",t:"Невыкуп — 1 шт → возврат"},{d:"08.04",t:"Заказ — 4 шт"},{d:"01.04",t:"Поставка #"+s.ship+" принята"},{d:"28.03",t:"Отгрузка Хабаровск"}].map(e=>`<div class="tl-i"><span class="tl-d">${e.d}</span> — ${e.t}</div>`).join("")}</div>
+</div>
+
+<!-- Override -->
+<div class="ov">
+<div class="skc-st">✏️ Ручное управление</div>
+<div class="ov-btns"><span style="font-size:10px;color:var(--muted);padding:4px 0">Приоритет:</span>
+${["высокий","обычный","не трогать"].map(x=>`<button class="${s.priority===x?'act':''}" onclick="SKU.find(s=>s.id===${s.id}).priority='${x}';renderP3()">${x}</button>`).join("")}</div>
+<div class="ov-btns" style="margin-top:4px"><span style="font-size:10px;color:var(--muted);padding:4px 0">Решение:</span>
+${["ускорить","держать","скидировать","вывезти"].map(x=>`<button>${x}</button>`).join("")}</div>
+<textarea placeholder="Комментарий к SKU...">${s.comment}</textarea>
+<div style="font-size:9px;color:var(--muted);margin-top:4px">В рабочей версии: приоритеты и решения сохраняются в базу данных и видны всем сотрудникам</div>
+</div>
+</div>`;
+}
+
+// ===== RENDER ALL =====
+function renderAll(){renderTariff();renderFbar();renderP0();renderP1();renderP2();renderP3()}
+renderNav();renderAll();showPage();
+</script>
+</body>
+</html>
